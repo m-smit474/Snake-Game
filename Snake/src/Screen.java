@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -26,7 +28,12 @@ public class Screen extends JPanel implements Runnable{
 	
 	private int ticks = 0;
 	
+	private Key key;
+	
 	public Screen() {
+		setFocusable(true);
+		key = new Key();
+		addKeyListener(key);
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		
 		snake = new ArrayList<BodyPart>();
@@ -64,6 +71,9 @@ public class Screen extends JPanel implements Runnable{
 		
 		g.clearRect(0, 0, WIDTH, HEIGHT);						// Clears screen
 		
+		g.setColor(new Color(10,50,0));							// Dark green background
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		
 		g.setColor(Color.BLACK);
 		for(int i = 0; i < WIDTH / 10; i++) {					// Vertical grid lines
 			g.drawLine(i * 10, 0, i * 10, HEIGHT);
@@ -93,6 +103,51 @@ public class Screen extends JPanel implements Runnable{
 		while(running) {
 			tick();
 			repaint();
+		}
+		
+	}
+	
+	private class Key implements KeyListener {					// Takes keyboard input
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+
+		public void keyPressed(KeyEvent e) {
+			int key = e.getKeyCode();
+			
+			if(key == KeyEvent.VK_RIGHT && !left) {
+				up = false;
+				down = false;
+				right = true;
+			}
+			
+			if(key == KeyEvent.VK_LEFT && !right) {
+				up = false;
+				down = false;
+				left = true;
+			}
+			
+			if(key == KeyEvent.VK_UP && !down) {
+				right = false;
+				left = false;
+				up = true;
+			}
+			
+			if(key == KeyEvent.VK_DOWN && !up) {
+				right = false;
+				left = false;
+				down = true;
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
 		}
 		
 	}
