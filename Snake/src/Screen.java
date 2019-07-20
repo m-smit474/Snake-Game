@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
@@ -17,6 +18,11 @@ public class Screen extends JPanel implements Runnable{
 	
 	private BodyPart b;
 	private ArrayList<BodyPart> snake;							// A dynamic array
+	
+	private Apple apple;
+	private ArrayList<Apple> apples;
+	
+	private Random r;
 	
 	private int xCoor = 10, yCoor = 10;
 	private int size = 5;
@@ -36,7 +42,10 @@ public class Screen extends JPanel implements Runnable{
 		addKeyListener(key);
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		
+		r = new Random();
+		
 		snake = new ArrayList<BodyPart>();
+		apples = new ArrayList<Apple>();
 		
 		start();
 	}
@@ -47,6 +56,35 @@ public class Screen extends JPanel implements Runnable{
 			b = new BodyPart(xCoor, yCoor, 10);
 			snake.add(b);
 		}
+		
+		if(apples.size() == 0) {
+			int xCoor = r.nextInt(79);
+			int yCoor = r.nextInt(79);
+			
+			apple = new Apple(xCoor, yCoor, 10);
+			apples.add(apple);
+		}
+		
+		for(int i = 0; i < apples.size(); i++) {
+			if(xCoor == apples.get(i).getxCoor() && yCoor == apples.get(i).getyCoor()) {
+				size++;
+				apples.remove(i);
+				i--;
+			}
+		}
+		
+		for(int i = 0; i < snake.size(); i++) {
+			if(xCoor == snake.get(i).getxCoor() && yCoor == snake.get(i).getyCoor()) {
+				if(i != snake.size() - 1) {
+					stop();
+				}
+			}
+		}
+		
+		if(xCoor < 0 || xCoor > 79 || yCoor < 0 || yCoor > 79) {
+			stop();
+		}
+		
 		
 		ticks++;
 		
@@ -86,6 +124,10 @@ public class Screen extends JPanel implements Runnable{
 		for(int i = 0; i < snake.size(); i++) {
 			snake.get(i).draw(g);
 		}
+		
+		for(int i = 0; i < apples.size(); i++) {
+			apples.get(i).draw(g);
+		}
 	}
 	
 	public void start() {
@@ -95,7 +137,12 @@ public class Screen extends JPanel implements Runnable{
 	}
 	
 	public void stop() {
-		
+		running = false;
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void run() {											// Required by Runnable
