@@ -81,9 +81,14 @@ public class Screen extends JPanel implements Runnable{
 			}
 		}
 		
-		if(xCoor < 0 || xCoor > 79 || yCoor < 0 || yCoor > 79) {
-			stop();
-		}
+		if(xCoor < 0)
+			xCoor += 81;
+		else if(xCoor > 79)
+			xCoor -= 81;
+		else if(yCoor < 0)
+			yCoor += 81;
+		else if(yCoor > 79)
+			yCoor -= 81;
 		
 		
 		ticks++;
@@ -156,13 +161,6 @@ public class Screen extends JPanel implements Runnable{
 	
 	private class Key implements KeyListener {					// Takes keyboard input
 
-		@Override
-		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-
 		public void keyPressed(KeyEvent e) {
 			int key = e.getKeyCode();
 			
@@ -193,6 +191,12 @@ public class Screen extends JPanel implements Runnable{
 
 		@Override
 		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
 			
 		}
