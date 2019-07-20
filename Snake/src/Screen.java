@@ -133,6 +133,11 @@ public class Screen extends JPanel implements Runnable{
 		for(int i = 0; i < apples.size(); i++) {
 			apples.get(i).draw(g);
 		}
+		
+		if(!running) {
+			g.setColor(Color.RED);
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+		}
 	}
 	
 	public void start() {
@@ -148,6 +153,8 @@ public class Screen extends JPanel implements Runnable{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		repaint();
 	}
 	
 	public void run() {											// Required by Runnable
