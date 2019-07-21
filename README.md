@@ -1,6 +1,6 @@
 # Snake Game
   
-  ***REQUIRES JDK***
+  ***REQUIRES JDK ON SYSTEM***
 
   How to play:
   
